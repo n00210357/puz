@@ -292,7 +292,13 @@ const login = (req, res) =>
             {
                 return res.status(200).json(
                 {
-
+                    message: "Puzzle created",
+                    token: jwt.sign(
+                    {
+                       email: user.email,
+                       username: user.username,
+                       _id: user._id
+                    }, process.env.JWT_SECRET, )
                 })
             }
 
@@ -306,6 +312,7 @@ const login = (req, res) =>
 
             return res.status(200).json(
             {
+                message: "Puzzle created",
                 token: jwt.sign(
                 {
                     email: user.email,
