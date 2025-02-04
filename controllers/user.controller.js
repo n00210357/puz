@@ -292,7 +292,7 @@ const login = (req, res) =>
             {
                 return res.status(200).json(
                 {
-                    fg: req,
+                    message: "Puzzle created",
                     token: jwt.sign(
                     {
                        email: user.email,
