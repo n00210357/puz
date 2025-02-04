@@ -292,6 +292,7 @@ const login = (req, res) =>
             {
                 return res.status(200).json(
                 {
+                    data,
                     token: jwt.sign(
                     {
                        email: user.email,
