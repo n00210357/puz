@@ -292,7 +292,7 @@ const login = (req, res) =>
             {
                 return res.status(200).json(
                 {
-                    user,
+                    _id: user._id,
                     token: jwt.sign(
                     {
                        email: user.email,
@@ -312,7 +312,7 @@ const login = (req, res) =>
 
             return res.status(200).json(
             {
-                user,
+                _id: user._id,
                 token: jwt.sign(
                 {
                     email: user.email,
