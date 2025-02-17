@@ -30,7 +30,7 @@ const readData = (req, res) =>
     });
 };
 
-//gets all mineral_mines in the database
+//gets all comments in the database
 const readAll = (req, res) =>
 {
     comment.find().then(data =>

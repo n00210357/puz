@@ -1,7 +1,7 @@
 //enables mongoose modules
 const { Schema, model } = require('mongoose');
 
-const mineralSchema = new Schema(
+const PuzzleSchema = new Schema(
 {
     //links to the user that is commenting
     user_id:
@@ -34,4 +34,4 @@ const mineralSchema = new Schema(
 });
 
 //exports the model
-module.exports = model('Mineral', mineralSchema);
+module.exports = model('Puzzle', PuzzleSchema);
