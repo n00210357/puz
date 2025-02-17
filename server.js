@@ -48,10 +48,10 @@ app.use((req, res, next) =>
 
 //connects the routes
 app.use('/api/users', require('./routes/users.js'));
-//app.use('/api/puzzles', require('./routes/puzzles.js'));
-//app.use('/api/companies', require('./routes/companies.js'));
+app.use('/api/puzzles', require('./routes/puzzles.js'));
+app.use('/api/comments', require('./routes/comments.js'));
+app.use('/api/messages', require('./routes/messages.js'));
 //app.use('/api/mines', require('./routes/mines.js'));
-//app.use('/api/work_hours', require('./routes/work_hours.js'));
 //app.use('/api/mineral_mines', require('./routes/mineral_mines.js'));
 
 //logs the port

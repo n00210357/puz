@@ -3,6 +3,12 @@ const { Schema, model } = require('mongoose');
 
 const mineralSchema = new Schema(
 {
+    //links to the user that is commenting
+    user_id:
+    {
+        type:String,
+        required: [true, 'Description is required']
+    },
     //the puzzles name
     name: 
     {
@@ -10,18 +16,16 @@ const mineralSchema = new Schema(
         trim: true,
         required: true
     },
-    //declares what type of puzzle it is
-    puzzleType:
-    {
-        type:String,
-        required: [true, 'The puzzle type is required'],
-    },
-
     //holds any nessary info about the puzzle not include any were else in the database
     puzzleCode:
     {
         type:String,
         required: [true, 'The puzzle code is required']
+    },
+    //stores the http path to a image file
+    image_path:
+    {
+        type:String
     }
 },
 

@@ -262,9 +262,9 @@ const registor = (req, res) =>
         newUser.image_path = process.env.STORAGE_ENGINE === 'S3' ? req.file.key : req.file.filename;
     }
 
-    if (newUser.rank == null || newUser.rank == undefined)
+    if (newUser.rank == null || newUser.rank == undefined || newUser.rank != Number)
     {
-        console.log("gfg")
+        newUser.rank = 0;
     }
 
     newUser.password = bcrypt.hashSync(req.body.password, 10);

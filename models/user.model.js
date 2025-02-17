@@ -45,6 +45,11 @@ const userSchema = new Schema(
         type:String,
         required: true
     },
+    //stores the setting
+    settings:
+    {
+        type:String
+    },
     //stores the http path to a image file
     image_path:
     {
