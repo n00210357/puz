@@ -48,7 +48,7 @@ app.use((req, res, next) =>
 
 //connects the routes
 app.use('/api/users', require('./routes/users.js'));
-//app.use('/api/puzzles', require('./routes/puzzles.js'));
+app.use('/api/puzzles', require('./routes/puzzles.js'));
 //app.use('/api/comments', require('./routes/comments.js'));
 //app.use('/api/messages', require('./routes/messages.js'));
 //app.use('/api/mines', require('./routes/mines.js'));
