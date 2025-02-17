@@ -1,7 +1,7 @@
 //enables mongoose modules
 const { Schema, model } = require('mongoose');
 
-const Work_hourSchema = new Schema(
+const MessageSchema = new Schema(
 {
     //links to the worker that is working these hours
     reciever:
@@ -28,4 +28,4 @@ const Work_hourSchema = new Schema(
 });
 
 //exports the model
-module.exports = model('Work_hour', Work_hourSchema);
+module.exports = model('Message', MessageSchema);
