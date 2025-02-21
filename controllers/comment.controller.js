@@ -3,14 +3,14 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 
 //connects to needed models
-const comment = require('../models/comment.model');
+const Comment = require('../models/comment.model');
 const Puzzle = require('../models/puzzle.model');
 const User = require('../models/user.model');
 
 //reads comment data
 const readData = (req, res) => 
 {
-    comment.find()
+    Comment.find()
     .then((data) => 
     {
         console.log(data);
@@ -33,7 +33,7 @@ const readData = (req, res) =>
 //gets all comments in the database
 const readAll = (req, res) =>
 {
-    comment.find().then(data =>
+    Comment.find().then(data =>
     {
         console.log(data);
     
@@ -52,12 +52,12 @@ const readAll = (req, res) =>
     });
 };
 
-//gets one comment in the database
+//gets one Comment in the database
 const readOne = (req, res) => 
 {
     let id = req.params.id;
 
-    comment.findById(id)
+    Comment.findById(id)
     .then((data) => 
     {
         if(data)
@@ -68,7 +68,7 @@ const readOne = (req, res) =>
         {
             res.status(404).json(
             {
-                "message": `comment with id: ${id} not found`
+                "message": `Comment with id: ${id} not found`
             });
         }        
     })
@@ -89,7 +89,7 @@ const readOne = (req, res) =>
     });
 };
 
-//creates a comment
+//creates a Comment
 const createData = (req, res) =>
 {
     let body = req.body;
@@ -116,11 +116,11 @@ const createData = (req, res) =>
             });
         }
     })
-    .then(comment.create(body).then(data =>
+    .then(Comment.create(body).then(data =>
     {    
         return res.status(201).json
         ({
-            message: "comment created",
+            message: "Comment created",
             data
         });
     })
@@ -135,7 +135,7 @@ const createData = (req, res) =>
     });
 };
 
-//updates a comment
+//updates a Comment
 const updateData = (req, res) => 
 {
     let id = req.params.id;
@@ -163,7 +163,7 @@ const updateData = (req, res) =>
             });
         }
     })
-    .then(comment.findByIdAndUpdate(id, body, 
+    .then(Comment.findByIdAndUpdate(id, body, 
     {
         new: true
     })
@@ -212,12 +212,12 @@ const updateData = (req, res) =>
     });
 };
 
-//delete a comment
+//delete a Comment
 const deleteData = (req, res) => 
 {
     let id = req.params.id;
 
-    comment.findById(id)
+    Comment.findById(id)
     .then(data =>
     {
         if (data)
