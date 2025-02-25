@@ -94,7 +94,7 @@ const createData = (req, res) =>
 {
     let body = req.body;
 
-    User.findOne({id: req.body.user_id})
+    User.findOne({_id: req.body.user_id})
     .then(user => 
     {
         if (!user)
@@ -105,7 +105,7 @@ const createData = (req, res) =>
             });
         }
     })
-    Comment.findOne({id: req.body.comment_id})
+    Comment.findOne({_id: req.body.comment_id})
     .then(user => 
     {
         if (!user)
@@ -141,7 +141,7 @@ const updateData = (req, res) =>
     let id = req.params.id;
     let body = req.body;
 
-    User.findOne({id: req.body.user_id})
+    User.findOne({_id: req.body.user_id})
     .then(user => 
     {
         if (!user)
@@ -152,7 +152,7 @@ const updateData = (req, res) =>
             });
         }
     })
-    Comment.findOne({id: req.body.comment_id})
+    Comment.findOne({_id: req.body.comment_id})
     .then(comment => 
     {
         if (!comment)

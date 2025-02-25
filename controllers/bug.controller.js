@@ -93,7 +93,7 @@ const createData = (req, res) =>
 {
     let body = req.body;
 
-    User.findOne({id: req.body.user_id})
+    User.findOne({_id: req.body.user_id})
     .then(user => 
     {
         if (!user)
@@ -129,7 +129,7 @@ const updateData = (req, res) =>
     let id = req.params.id;
     let body = req.body;
 
-    User.findOne({id: req.body.user_id})
+    User.findOne({_id: req.body.user_id})
     .then(user => 
     {
         if (!user)
