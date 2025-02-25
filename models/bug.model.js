@@ -9,6 +9,11 @@ const BugSchema = new Schema(
         type:String,
         required: [true, 'User id is required']
     },
+    //links to the puzzle if their is one
+    puzzle_id:
+    {
+        type:String,
+    },
     //links to the worker that is working these hours
     text:
     {
