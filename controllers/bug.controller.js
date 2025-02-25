@@ -3,13 +3,13 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 
 //connects to needed models
-const Reply = require('../models/reply.model');
+const Bug = require('../models/bug.model');
 const User = require('../models/user.model');
 
 //reads reply data
 const readData = (req, res) => 
 {
-    Reply.find()
+    Bug.find()
     .then((data) => 
     {
         console.log(data);
@@ -32,7 +32,7 @@ const readData = (req, res) =>
 //gets all messages in the database
 const readAll = (req, res) =>
 {
-    Reply.find().then(data =>
+    Bug.find().then(data =>
     {
         console.log(data);
     
@@ -56,7 +56,7 @@ const readOne = (req, res) =>
 {
     let id = req.params.id;
 
-    Reply.findById(id)
+    Bug.findById(id)
     .then((data) => 
     {
         if(data)
@@ -67,7 +67,7 @@ const readOne = (req, res) =>
         {
             res.status(404).json(
             {
-                "reply": `Reply with id: ${id} not found`
+                "reply": `Bug with id: ${id} not found`
             });
         }        
     })
@@ -104,11 +104,11 @@ const createData = (req, res) =>
             });
         }
     })
-    .then(Reply.create(body).then(data =>
+    .then(Bug.create(body).then(data =>
     {    
         return res.status(201).json
         ({
-            reply: "Reply created",
+            reply: "Bug created",
             data
         });
     })
@@ -140,7 +140,7 @@ const updateData = (req, res) =>
             });
         }
     })
-    .then(Reply.findByIdAndUpdate(id, body, 
+    .then(Bug.findByIdAndUpdate(id, body, 
     {
         new: true
     })
@@ -159,7 +159,7 @@ const updateData = (req, res) =>
         {
             res.status(404).json(
             {
-                "reply": `Reply with id: ${id} not found`
+                "reply": `Bug with id: ${id} not found`
             });
         }        
     }))
@@ -193,7 +193,7 @@ const deleteData = (req, res) =>
 {
     let id = req.params.id;
 
-    Reply.findById(id)
+    Bug.findById(id)
     .then(data =>
     {
         if (data)
@@ -204,7 +204,7 @@ const deleteData = (req, res) =>
         {
             res.status(404).json(
             {
-                "reply": `Reply with id: ${id} not found`
+                "reply": `Bug with id: ${id} not found`
             });
         }
     })
@@ -212,7 +212,7 @@ const deleteData = (req, res) =>
     {
         res.status(200).json(
         {
-            "reply": `Reply with id: ${id} deleted successfully`
+            "reply": `Bug with id: ${id} deleted successfully`
         });
     })
     .catch((err) => 
