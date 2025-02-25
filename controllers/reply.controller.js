@@ -153,9 +153,9 @@ const updateData = (req, res) =>
         }
     })
     Comment.findOne({id: req.body.comment_id})
-    .then(user => 
+    .then(comment => 
     {
-        if (!user)
+        if (!comment)
         {
             return res.status(422).json(
             {
