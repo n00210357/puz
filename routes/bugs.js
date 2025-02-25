@@ -10,10 +10,10 @@ const
     createData,
     updateData,
     deleteData
-} = require('../controllers/work_hour.controller.js');
+} = require('../controllers/bug.controller.js');
 
-//checks if a worker is logged in
-const { loginRequired } = require('../controllers/worker.controller.js');
+//checks if a user is logged in
+const { loginRequired } = require('../controllers/user.controller.js');
 
 //the controller functions that do not require the user be logged in
 router.get('/', readAll);

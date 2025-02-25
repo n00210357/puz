@@ -3,14 +3,13 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 
 //connects to needed models
-const mineral_mine = require('../models/mineral_mine.model');
-const Mineral = require('../models/mineral.model');
-const Mine = require('../models/mine.model');
+const Reply = require('../models/reply.model');
+const User = require('../models/user.model');
 
-//reads mineral_mine data
+//reads reply data
 const readData = (req, res) => 
 {
-    mineral_mine.find()
+    Reply.find()
     .then((data) => 
     {
         console.log(data);
@@ -20,7 +19,7 @@ const readData = (req, res) =>
         }
         else
         {
-            res.status(404).json("None found");
+           res.status(404).json("None found");
         }
     })
     .catch((err) => 
@@ -30,10 +29,10 @@ const readData = (req, res) =>
     });
 };
 
-//gets all mineral_mines in the database
+//gets all messages in the database
 const readAll = (req, res) =>
 {
-    mineral_mine.find().then(data =>
+    Reply.find().then(data =>
     {
         console.log(data);
     
@@ -52,12 +51,12 @@ const readAll = (req, res) =>
     });
 };
 
-//gets one mineral_mine in the database
+//gets one reply in the database
 const readOne = (req, res) => 
 {
     let id = req.params.id;
 
-    mineral_mine.findById(id)
+    Reply.findById(id)
     .then((data) => 
     {
         if(data)
@@ -68,7 +67,7 @@ const readOne = (req, res) =>
         {
             res.status(404).json(
             {
-                "message": `mineral_mine with id: ${id} not found`
+                "reply": `Reply with id: ${id} not found`
             });
         }        
     })
@@ -79,7 +78,7 @@ const readOne = (req, res) =>
         {
             res.status(400).json(
             {
-                "message": `Bad request, ${id} is not a valid id`
+                "reply": `Bad request, ${id} is not a valid id`
             });
         }
         else 
@@ -89,38 +88,27 @@ const readOne = (req, res) =>
     });
 };
 
-//creates a mineral_mine
+//creates a reply
 const createData = (req, res) =>
 {
     let body = req.body;
 
-    Mineral.findOne({_id: req.body.mineral_id})
-    .then(mineral => 
+    User.findOne({id: req.body.user_id})
+    .then(user => 
     {
-        if (!mineral)
+        if (!user)
         {
             return res.status(422).json(
             {
-                message: "Not a workers email",
+                reply: "Not a users id",
             });
         }
     })
-    Mine.findOne({_id: req.body.mine_id})
-    .then(mine => 
-    {
-        if (!mine)
-        {
-            return res.status(422).json(
-            {
-                message: "Not a mine",
-            });
-        }
-    })
-    .then(mineral_mine.create(body).then(data =>
+    .then(Reply.create(body).then(data =>
     {    
         return res.status(201).json
         ({
-            message: "mineral_mine created",
+            reply: "Reply created",
             data
         });
     })
@@ -135,35 +123,24 @@ const createData = (req, res) =>
     });
 };
 
-//updates a mineral_mine
+//updates a reply
 const updateData = (req, res) => 
 {
     let id = req.params.id;
     let body = req.body;
 
-    Mineral.findOne({_id: req.body.mineral_id})
-    .then(mineral => 
+    User.findOne({id: req.body.user_id})
+    .then(user => 
     {
-        if (!mineral)
+        if (!user)
         {
             return res.status(422).json(
             {
-                message: "Not a workers email",
+                reply: "Not a users id",
             });
         }
     })
-    Mine.findOne({_id: req.body.mine_id})
-    .then(mine => 
-    {
-        if (!mine)
-        {
-            return res.status(422).json(
-            {
-                message: "Not a mine",
-            });
-        }
-    })
-    .then(mineral_mine.findByIdAndUpdate(id, body, 
+    .then(Reply.findByIdAndUpdate(id, body, 
     {
         new: true
     })
@@ -182,7 +159,7 @@ const updateData = (req, res) =>
         {
             res.status(404).json(
             {
-                "message": `mineral_mine with id: ${id} not found`
+                "reply": `Reply with id: ${id} not found`
             });
         }        
     }))
@@ -191,17 +168,16 @@ const updateData = (req, res) =>
         if(err.name === 'ValidationError')
         {
             console.error('Validation Error!!', err);
-            res.status(422).json(
-            {
+            res.status(422).json({
                 "msg": "Validation Error",
-                "error" : err.message 
+                "error" : err.reply 
             });
         }
         else if(err.name === 'CastError') 
         {
             res.status(400).json(
             {
-                "message": `Bad request, ${id} is not a valid id`
+                "reply": `Bad request, ${id} is not a valid id`
             });
         }
         else 
@@ -212,12 +188,12 @@ const updateData = (req, res) =>
     });
 };
 
-//delete a mineral_mine
+//delete a reply
 const deleteData = (req, res) => 
 {
     let id = req.params.id;
 
-    mineral_mine.findById(id)
+    Reply.findById(id)
     .then(data =>
     {
         if (data)
@@ -228,7 +204,7 @@ const deleteData = (req, res) =>
         {
             res.status(404).json(
             {
-                "message": `mineral_mine with id: ${id} not found`
+                "reply": `Reply with id: ${id} not found`
             });
         }
     })
@@ -236,7 +212,7 @@ const deleteData = (req, res) =>
     {
         res.status(200).json(
         {
-            "message": `mineral_mine with id: ${id} deleted successfully`
+            "reply": `Reply with id: ${id} deleted successfully`
         });
     })
     .catch((err) => 
@@ -246,10 +222,11 @@ const deleteData = (req, res) =>
         {
             res.status(400).json(
             {
-                "message": `Bad request, ${id} is not a valid id`
+                "reply": `Bad request, ${id} is not a valid id`
             });
         }
-        else {
+        else 
+        {
             res.status(500).json(err)
         } 
     }); 

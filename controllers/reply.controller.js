@@ -3,74 +3,14 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 
 //connects to needed models
-const Mine = require('../models/mine.model');
-const Worker = require('../models/worker.model');
-const Company = require('../models/company.model');
+const Reply = require('../models/reply.model');
+const User = require('../models/user.model');
+const Comment = require('../models/comment.model');
 
-//deletes a saved image
-const deleteImage = async (filename) =>
-{
-    //checks if env links to S3
-    if (process.env.STORAGE_ENGINE === 'S3')
-    {
-        const { S3Client, DeleteObjectCommand } = require('@aws-sdk/client-s3');
-
-        //checks aws credentials
-        const s3 = new S3Client(
-        {
-            region: process.env.MY_AWS_REGION,
-            credentials:
-            {
-                accessKeyId: process.env.MY_AWS_ACCESS_KEY_ID,
-                secretAccessKey: process.env.MY_AWS_SECRET_ACCESS_KEY
-            }
-        });
-        //deletes the image from aws
-        try
-        {
-            const data = await s3.send(new DeleteObjectCommand(
-            {
-                Bucket: process.env.MY_AWS_BUCKET,
-                Key: filename
-            }));
-
-            console.log("Object deleted ", data);
-        }
-        catch(err)
-        {
-            console.error(err);
-        }
-    }
-    else
-    {
-        //deletes image from uploads folder
-        let path = `public/uploads/${filename}`;
-        fs.access(path, fs.constants.F_OK, (err) =>
-        {
-            if (err)
-            {
-                console.error(err);
-                return;
-            }
-
-            fs.unlink(path, err =>
-            {
-                if (err)
-                {
-                    console.error(err);
-                    return;
-                }
-
-                console.log(`${filename} was deleted`);
-            })
-        })
-    }
-}
-
-//reads mine data
+//reads reply data
 const readData = (req, res) => 
-    {
-    Mine.find()
+{
+    Reply.find()
     .then((data) => 
     {
         console.log(data);
@@ -80,19 +20,20 @@ const readData = (req, res) =>
         }
         else
         {
-            res.status(404).json("None found");
+           res.status(404).json("None found");
         }
     })
-    .catch((err) => {
+    .catch((err) => 
+    {
         console.log(err);
         res.status(500).json(err);
     });
 };
 
-//gets all mines in the database
+//gets all messages in the database
 const readAll = (req, res) =>
 {
-    Mine.find().then(data =>
+    Reply.find().then(data =>
     {
         console.log(data);
     
@@ -111,26 +52,25 @@ const readAll = (req, res) =>
     });
 };
 
-//gets one mine in the database
+//gets one reply in the database
 const readOne = (req, res) => 
 {
     let id = req.params.id;
 
-    Mine.findById(id)
+    Reply.findById(id)
     .then((data) => 
     {
         if(data)
         {
-            data.image_path = process.env.IMAGE_URL + data.image_path;
             res.status(200).json(data);
         }
         else 
         {
             res.status(404).json(
             {
-                "message": `Mine with id: ${id} not found`
+                "reply": `Reply with id: ${id} not found`
             });
-        }            
+        }        
     })
     .catch((err) => 
     {
@@ -139,7 +79,7 @@ const readOne = (req, res) =>
         {
             res.status(400).json(
             {
-                "message": `Bad request, ${id} is not a valid id`
+                "reply": `Bad request, ${id} is not a valid id`
             });
         }
         else 
@@ -149,38 +89,38 @@ const readOne = (req, res) =>
     });
 };
 
-//creates a mine
+//creates a reply
 const createData = (req, res) =>
 {
     let body = req.body;
 
-    Worker.findOne({email: req.body.manager_email})
-    .then(worker => 
+    User.findOne({id: req.body.user_id})
+    .then(user => 
     {
-        if (!worker)
+        if (!user)
         {
             return res.status(422).json(
             {
-                message: "Not a workers email",
+                reply: "Not a users id",
             });
         }
     })
-    Company.findOne({name: req.body.company_name})
-    .then(company => 
+    Comment.findOne({id: req.body.comment_id})
+    .then(user => 
     {
-        if (!company)
+        if (!user)
         {
             return res.status(422).json(
             {
-                message: "Not a company",
+                reply: "Not a users email",
             });
         }
     })
-    .then(Mine.create(body).then(data =>
+    .then(Reply.create(body).then(data =>
     {    
         return res.status(201).json
         ({
-            message: "Mine created",
+            reply: "Reply created",
             data
         });
     })
@@ -195,40 +135,35 @@ const createData = (req, res) =>
     });
 };
 
-//updates a mine
+//updates a reply
 const updateData = (req, res) => 
 {
     let id = req.params.id;
     let body = req.body;
 
-    if (req.file)
+    User.findOne({id: req.body.user_id})
+    .then(user => 
     {
-        body.image_path = process.env.STORAGE_ENGINE === 'S3' ? req.file.key : req.file.filename;
-    }
-
-    Worker.findOne({email: req.body.manager_email})
-    .then(worker => 
-    {
-        if (!worker)
+        if (!user)
         {
             return res.status(422).json(
             {
-                message: "Not a workers email",
+                reply: "Not a users id",
             });
         }
     })
-    Company.findOne({name: req.body.company_name})
-    .then(company => 
+    Comment.findOne({id: req.body.comment_id})
+    .then(user => 
     {
-        if (!company)
+        if (!user)
         {
             return res.status(422).json(
             {
-                message: "Not a company",
+                reply: "Not a users email",
             });
         }
     })
-    .then(Mine.findByIdAndUpdate(id, body, 
+    .then(Reply.findByIdAndUpdate(id, body, 
     {
         new: true
     })
@@ -247,7 +182,7 @@ const updateData = (req, res) =>
         {
             res.status(404).json(
             {
-                "message": `Mine with id: ${id} not found`
+                "reply": `Reply with id: ${id} not found`
             });
         }        
     }))
@@ -256,17 +191,16 @@ const updateData = (req, res) =>
         if(err.name === 'ValidationError')
         {
             console.error('Validation Error!!', err);
-            res.status(422).json(
-            {
+            res.status(422).json({
                 "msg": "Validation Error",
-                "error" : err.message 
+                "error" : err.reply 
             });
         }
         else if(err.name === 'CastError') 
         {
             res.status(400).json(
             {
-               "message": `Bad request, ${id} is not a valid id`
+                "reply": `Bad request, ${id} is not a valid id`
             });
         }
         else 
@@ -277,35 +211,31 @@ const updateData = (req, res) =>
     });
 };
 
-//delete a mine
+//delete a reply
 const deleteData = (req, res) => 
 {
     let id = req.params.id;
-    let filename = '';
 
-    Mine.findById(id)
+    Reply.findById(id)
     .then(data =>
     {
         if (data)
         {
-            filename = data.image_path;
             return data.deleteOne();
         }
         else
         {
             res.status(404).json(
             {
-                "message": `Mine with id: ${id} not found`
+                "reply": `Reply with id: ${id} not found`
             });
         }
     })
     .then(() =>
     {
-        deleteImage(filename);
-
         res.status(200).json(
         {
-            "message": `Mine with id: ${id} deleted successfully`
+            "reply": `Reply with id: ${id} deleted successfully`
         });
     })
     .catch((err) => 
@@ -315,10 +245,11 @@ const deleteData = (req, res) =>
         {
             res.status(400).json(
             {
-                "message": `Bad request, ${id} is not a valid id`
+                "reply": `Bad request, ${id} is not a valid id`
             });
         }
-        else {
+        else 
+        {
             res.status(500).json(err)
         } 
     }); 
