@@ -19,7 +19,7 @@
     "dcryptjs": "^1.0.5",
     "dotenv": "^16.4.5",
     "express": "^4.21.1",
-    "faker": "^6.6.6",
+    "faker": "^5.5.3",
     "jsonwebtoken": "^9.0.2",
     "module_name": "^1.0.0",
     "mongodb": "^6.10.0",
