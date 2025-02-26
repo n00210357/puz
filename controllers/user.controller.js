@@ -152,7 +152,7 @@ const updateData = (req, res) =>
     let id = req.params.id;
     let body = req.body;
 
-    if (body.file)
+    if (body.image_path)
     {
         body.image_path = process.env.STORAGE_ENGINE === 'S3' ? req.file.key : req.file.filename;
     }
@@ -165,9 +165,9 @@ const updateData = (req, res) =>
     {
         if(data)
         {
-            if (data.filename)
+            if (data.image_path)
             {
-                deleteImage(data.filename)
+                deleteImage(data.image_path)
             }
         
             res.status(201).json(data);
@@ -257,7 +257,7 @@ const registor = (req, res) =>
     let newUser = new User(req.body);
     console.log(req.body)
 
-    if (newUser.file)
+    if (newUser.image_path)
     {
         newUser.image_path = process.env.STORAGE_ENGINE === 'S3' ? req.file.key : req.file.filename;
     }

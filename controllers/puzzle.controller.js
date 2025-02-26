@@ -148,7 +148,7 @@ const createData = (req, res) =>
 {
     let body = req.body;
     
-    if (body.file)
+    if (body.image_path)
     {
         body.image_path = process.env.STORAGE_ENGINE === 'S3' ? req.file.key : req.file.filename;
     }
@@ -178,7 +178,7 @@ const updateData = (req, res) =>
     let id = req.params.id;
     let body = req.body;
 
-    if (body.file)
+    if (body.image_path)
     {
         body.image_path = process.env.STORAGE_ENGINE === 'S3' ? req.file.key : req.file.filename;
     }
