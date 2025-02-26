@@ -257,9 +257,9 @@ const registor = (req, res) =>
     let newUser = new User(req.body);
     console.log(req.image_path)
 
-    if (newUser.image_path)
+    if(req.file)
     {
-        newUser.image_path = process.env.STORAGE_ENGINE === 'S3' ? newUser.image_path.key : newUser.image_path.filename;
+        newUser.image_path = process.env.STORAGE_ENGINE === 'S3' ? req.file.key : req.file.filename;
     }
 
     if (newUser.rank == null || newUser.rank == undefined || newUser.rank != Number)
@@ -271,7 +271,7 @@ const registor = (req, res) =>
     newUser.save().then(data =>
     {
         data.password = undefined;
-        return res.status(201).json(req.file);
+        return res.status(201).json(data);
     })
     .catch(err =>
     {
