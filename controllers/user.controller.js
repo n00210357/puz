@@ -261,6 +261,12 @@ const registor = (req, res) =>
     {
         newUser.image_path = process.env.STORAGE_ENGINE === 'S3' ? req.file.key : req.file.filename;
     }
+    else 
+    {
+        return res.status(422).json({
+            message: "Image not uploaded!"
+        });
+    }
 
     if (newUser.rank == null || newUser.rank == undefined || newUser.rank != Number)
     {
