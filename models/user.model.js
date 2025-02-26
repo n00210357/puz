@@ -53,7 +53,7 @@ const userSchema = new Schema(
     //stores the http path to a image file
     image_path:
     {
-        type: String || File
+        type: String
     }
 },
 
