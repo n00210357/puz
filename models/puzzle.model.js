@@ -16,7 +16,7 @@ const PuzzleSchema = new Schema(
         trim: true,
         required: true
     },
-    //holds any nessary info about the puzzle not include any were else in the database
+    //holds any info about the puzzle not include any were else in the database
     puzzleCode:
     {
         type:String,
