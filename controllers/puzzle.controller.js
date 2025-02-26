@@ -146,7 +146,7 @@ const readOne = (req, res) =>
 //creates a puzzle
 const createData = (req, res) =>
 {
-    let body = req.body;
+    let body = Puzzle(req.body);
     
     if(req.file)
     {
@@ -176,7 +176,7 @@ const createData = (req, res) =>
 const updateData = (req, res) => 
 {
     let id = req.params.id;
-    let body = req.body;
+    let body = Puzzle(req.body);
 
     if(req.file)
     {

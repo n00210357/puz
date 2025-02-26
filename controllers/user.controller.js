@@ -150,7 +150,7 @@ const readOne = (req, res) =>
 const updateData = (req, res) => 
 {
     let id = req.params.id;
-    let body = req.body;
+    let body =  User(req.body);
 
     if(req.file)
     {
