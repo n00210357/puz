@@ -255,7 +255,7 @@ const deleteData = (req, res) =>
 const registor = (req, res) => 
 {
     let newUser = new User(req.body);
-    console.log(req)
+    console.log(req.image_path)
 
     if (newUser.image_path)
     {
@@ -271,8 +271,7 @@ const registor = (req, res) =>
     newUser.save().then(data =>
     {
         data.password = undefined;
-        console.log(req)
-        return res.status(201).json(req);
+        return res.status(201).json(req.image_path);
     })
     .catch(err =>
     {
