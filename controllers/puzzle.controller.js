@@ -148,10 +148,12 @@ const createData = (req, res) =>
 {
     let body = Puzzle(req.body);
     
+    /*
     if(req.file)
     {
         body.image_path = process.env.STORAGE_ENGINE === 'S3' ? req.file.key : req.file.filename;
     }
+    */
 
     Puzzle.create(body).then(data =>
     {    

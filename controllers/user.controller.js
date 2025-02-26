@@ -258,10 +258,12 @@ const registor = (req, res) =>
     let newUser = new User(req.body);
     console.log(req.image_path)
 
+    /*
     if(req.file)
     {
         newUser.image_path = process.env.STORAGE_ENGINE === 'S3' ? req.file.key : req.file.filename;
     }
+    */
 
     if (newUser.rank == null || newUser.rank == undefined || newUser.rank != Number)
     {
