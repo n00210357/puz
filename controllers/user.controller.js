@@ -150,7 +150,7 @@ const readOne = (req, res) =>
 const updateData = (req, res) => 
 {
     let id = req.params.id;
-    let body =  User(req.body);
+    let body = req.body;
 
     //user info
     if(req.file)
@@ -168,7 +168,7 @@ const updateData = (req, res) =>
         {
             if (data.image_path)
             {
-                deleteImage(data.image_path)
+                deleteImage(User.image_path)
             }
         
             res.status(201).json(data);

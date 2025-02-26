@@ -176,7 +176,7 @@ const createData = (req, res) =>
 const updateData = (req, res) => 
 {
     let id = req.params.id;
-    let body = Puzzle(req.body);
+    let body = req.body;
 
     if(req.file)
     {
