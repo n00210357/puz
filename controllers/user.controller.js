@@ -255,11 +255,11 @@ const deleteData = (req, res) =>
 const registor = (req, res) => 
 {
     let newUser = new User(req.body);
-    console.log(req.body)
+    console.log(req)
 
     if (newUser.image_path)
     {
-        newUser.image_path = process.env.STORAGE_ENGINE === 'S3' ? body.image_path.key : body.image_path.filename;
+        newUser.image_path = process.env.STORAGE_ENGINE === 'S3' ? newUser.image_path.key : newUser.image_path.filename;
     }
 
     if (newUser.rank == null || newUser.rank == undefined || newUser.rank != Number)
@@ -271,7 +271,7 @@ const registor = (req, res) =>
     newUser.save().then(data =>
     {
         data.password = undefined;
-        return res.status(201).json(data);
+        return res.status(201).json(data + " "  + newUser + " " + req);
     })
     .catch(err =>
     {
