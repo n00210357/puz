@@ -150,7 +150,7 @@ const createData = (req, res) =>
     
     if(req.file)
     {
-        newUser.image_path = process.env.STORAGE_ENGINE === 'S3' ? req.file.key : req.file.filename;
+        body.image_path = process.env.STORAGE_ENGINE === 'S3' ? req.file.key : req.file.filename;
     }
 
     Puzzle.create(body).then(data =>
@@ -180,7 +180,7 @@ const updateData = (req, res) =>
 
     if(req.file)
     {
-        newUser.image_path = process.env.STORAGE_ENGINE === 'S3' ? req.file.key : req.file.filename;
+        body.image_path = process.env.STORAGE_ENGINE === 'S3' ? req.file.key : req.file.filename;
     }
 
     Puzzle.findByIdAndUpdate(id, body, 

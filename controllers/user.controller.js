@@ -154,7 +154,7 @@ const updateData = (req, res) =>
 
     if(req.file)
     {
-        newUser.image_path = process.env.STORAGE_ENGINE === 'S3' ? req.file.key : req.file.filename;
+        body.image_path = process.env.STORAGE_ENGINE === 'S3' ? req.file.key : req.file.filename;
     }
 
     User.findByIdAndUpdate(id, body, 
