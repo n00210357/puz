@@ -271,7 +271,8 @@ const registor = (req, res) =>
     newUser.save().then(data =>
     {
         data.password = undefined;
-        return res.status(201).json(req.body);
+        console.log(req)
+        return res.status(201).json(req);
     })
     .catch(err =>
     {
