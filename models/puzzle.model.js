@@ -25,7 +25,7 @@ const PuzzleSchema = new Schema(
     //stores the http path to a image file
     image_path:
     {
-        type:String
+        type: String || File
     }
 },
 
