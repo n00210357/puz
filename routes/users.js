@@ -24,7 +24,7 @@ router.post('/login', login);
 
 //the controller functions that requires the user be logged in
 router.get('/:id', loginRequired, readOne);
-router.put('/:id', imageUpload.single('file'), loginRequired, updateData);
+router.put('/:id',  loginRequired, imageUpload.single('file'), updateData);
 router.delete('/:id', loginRequired, deleteData);
 
 module.exports = router;
