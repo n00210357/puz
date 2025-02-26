@@ -191,7 +191,7 @@ const updateData = (req, res) =>
     {
         if(data)
         {
-            if (data.filename)
+            if (data.filename && User.image_path)
             {
                 deleteImage(data.filename)
             }

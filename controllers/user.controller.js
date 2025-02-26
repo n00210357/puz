@@ -166,7 +166,7 @@ const updateData = (req, res) =>
     {
         if(data)
         {
-            if (data.image_path)
+            if (data.image_path && User.image_path)
             {
                 deleteImage(User.image_path)
             }
