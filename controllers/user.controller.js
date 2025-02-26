@@ -152,9 +152,9 @@ const updateData = (req, res) =>
     let id = req.params.id;
     let body = req.body;
 
-    if (body.image_path)
+    if(req.file)
     {
-        body.image_path = process.env.STORAGE_ENGINE === 'S3' ? req.file.key : req.file.filename;
+        newUser.image_path = process.env.STORAGE_ENGINE === 'S3' ? req.file.key : req.file.filename;
     }
 
     User.findByIdAndUpdate(id, body, 
@@ -260,12 +260,6 @@ const registor = (req, res) =>
     if(req.file)
     {
         newUser.image_path = process.env.STORAGE_ENGINE === 'S3' ? req.file.key : req.file.filename;
-    }
-    else 
-    {
-        return res.status(422).json({
-            message: "Image not uploaded!"
-        });
     }
 
     if (newUser.rank == null || newUser.rank == undefined || newUser.rank != Number)
