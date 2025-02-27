@@ -155,6 +155,7 @@ const updateData = (req, res) =>
     //user info
     if(req.file)
     {
+        body.image_path = null
         body.image_path = process.env.STORAGE_ENGINE === 'S3' ? req.file.key : req.file.filename;
     }
 
