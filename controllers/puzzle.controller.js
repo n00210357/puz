@@ -147,9 +147,11 @@ const readOne = (req, res) =>
 const createData = (req, res) =>
 {
     let body = req.body;
-    
+
+    //user info
     if(req.file)
     {
+        body.image_path = null
         body.image_path = process.env.STORAGE_ENGINE === 'S3' ? req.file.key : req.file.filename;
     }
 
@@ -178,11 +180,12 @@ const updateData = (req, res) =>
     let id = req.params.id;
     let body = req.body;
 
+    //user info
     if(req.file)
     {
+        body.image_path = null
         body.image_path = process.env.STORAGE_ENGINE === 'S3' ? req.file.key : req.file.filename;
     }
-
     Puzzle.findByIdAndUpdate(id, body, 
     {
         new: true
@@ -191,11 +194,11 @@ const updateData = (req, res) =>
     {
         if(data)
         {
-            if (data.filename && User.image_path)
+            if (data.image_path && Puzzle.image_path)
             {
-                deleteImage(data.filename)
+                deleteImage(Puzzle.image_path)
             }
-
+        
             res.status(201).json(data);
         }
         else 
