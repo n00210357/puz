@@ -146,6 +146,7 @@ const readOne = (req, res) =>
 //creates a puzzle
 const createData = (req, res) =>
 {
+    //grabs body
     let body = req.body;
 
     //user info
