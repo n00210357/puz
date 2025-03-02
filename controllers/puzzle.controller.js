@@ -148,12 +148,11 @@ const readOne = (req, res) =>
 const createData = (req, res) =>
 {
     let body = req.body
-    let fil = req.file
 
     //user info
     if(req.file)
     {
-        //body.image_path = process.env.STORAGE_ENGINE === 'S3' ? req.file.key : req.file.filename;
+        body.image_path = process.env.STORAGE_ENGINE === 'S3' ? req.image.key : req.image.filename;
         body.image_path == "exist"
     }
     else
