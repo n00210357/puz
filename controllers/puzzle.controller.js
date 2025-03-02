@@ -151,16 +151,16 @@ const createData = (req, res) =>
     //user info
     if(req.file)
     {
-        body.image_path = null
         body.image_path = process.env.STORAGE_ENGINE === 'S3' ? req.file.key : req.file.filename;
     }
 
-    Puzzle.create(body).then(data =>
+    Puzzle.create(body, req).then(data =>
     {    
         return res.status(201).json
         ({
             message: "Puzzle created",
-            data
+            data,
+            body
         });
     }
     ).catch(err =>
