@@ -4,6 +4,7 @@ const bcrypt = require('bcryptjs');
 
 //connects to puzzle models
 const Puzzle = require('../models/puzzle.model');
+const User = require('../models/user.model');
 
 //deletes a saved image
 const deleteImage = async (filename) =>
@@ -165,7 +166,7 @@ const createData = (req, res) =>
             });
         }
     })
-    .then(Puzzle.create(body).then(data =>
+    .then(Puzzle.create(body).then(body =>
     {    
         return res.status(201).json
         ({
