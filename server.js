@@ -12,6 +12,7 @@ require('dotenv').config();
 require('./conifg/db.js')();
 require('./conifg/image_upload.js');
 
+//cors
 app.use(cors());
 
 //sets up the apps type
