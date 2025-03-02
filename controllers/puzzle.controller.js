@@ -154,12 +154,22 @@ const createData = (req, res) =>
         body.image_path = process.env.STORAGE_ENGINE === 'S3' ? req.file.key : req.file.filename;
     }
 
-    Puzzle.create(body, req).then(data =>
+    User.findOne({_id: req.body.user_id})
+    .then(user => 
+    {
+        if (!user)
+        {
+            return res.status(422).json(
+            {
+                message: "Not a user",
+            });
+        }
+    })
+    .then(Puzzle.create(body).then(data =>
     {    
         return res.status(201).json
         ({
             message: "Puzzle created",
-            data,
             body
         });
     }
@@ -171,7 +181,7 @@ const createData = (req, res) =>
         }
     
         return res.status(500).json(err);
-    });
+    }));
 };
 
 //updates a puzzle
