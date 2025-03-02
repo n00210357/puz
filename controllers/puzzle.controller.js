@@ -147,7 +147,8 @@ const readOne = (req, res) =>
 //creates a puzzle
 const createData = (req, res) =>
 {
-    let body = req.body;
+    let body = req.body
+    let fil = req.file
 
     //user info
     if(req.file)
@@ -170,12 +171,13 @@ const createData = (req, res) =>
             });
         }
     })
-    .then(Puzzle.create(body).then(body =>
+    .then(Puzzle.create(body, fil).then(body, fil =>
     {    
         return res.status(201).json
         ({
             message: "Puzzle created",
-            body
+            body,
+            fil
         });
     }
     ).catch(err =>
