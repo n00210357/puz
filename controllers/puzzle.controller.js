@@ -171,7 +171,7 @@ const createData = (req, res) =>
             });
         }
     })
-    .then(Puzzle.create(body, fil).then(body, fil =>
+    .then(Puzzle.create(body).then(body =>
     {    
         return res.status(201).json
         ({
