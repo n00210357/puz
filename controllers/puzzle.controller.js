@@ -154,6 +154,10 @@ const createData = (req, res) =>
     {
         body.image_path = process.env.STORAGE_ENGINE === 'S3' ? req.file.key : req.file.filename;
     }
+    else
+    {
+        body.image_path == "missing file"
+    }
 
     User.findOne({_id: req.body.user_id})
     .then(user => 
