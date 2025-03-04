@@ -99,10 +99,17 @@ const createData = (req, res) =>
     {
         if (!puzzle)
         {
-            return res.status(422).json(
+            Comment.findOne({_id: req.body.puzzle_id})
+            .then(comment => 
             {
-                message: "Not a workers email",
-            });
+                if (!comment)
+                {
+                    return res.status(422).json(
+                    {
+                        message: "Not a comment or puzzle",
+                    });
+                }
+            })
         }
     })
     User.findOne({_id: req.body.user_id})
@@ -146,10 +153,17 @@ const updateData = (req, res) =>
     {
         if (!puzzle)
         {
-            return res.status(422).json(
+            Comment.findOne({_id: req.body.puzzle_id})
+            .then(comment => 
             {
-                message: "Not a workers email",
-            });
+                if (!comment)
+                {
+                    return res.status(422).json(
+                    {
+                        message: "Not a comment or puzzle",
+                    });
+                }
+            })
         }
     })
     User.findOne({_id: req.body.user_id})
