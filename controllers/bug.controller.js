@@ -6,7 +6,67 @@ const bcrypt = require('bcryptjs');
 const Bug = require('../models/bug.model');
 const User = require('../models/user.model');
 
-//reads reply data
+//deletes a saved image
+const deleteImage = async (filename) =>
+{
+    //checks if env links to S3
+    if (process.env.STORAGE_ENGINE === 'S3')
+    {
+        const { S3Client, DeleteObjectCommand } = require('@aws-sdk/client-s3');
+      
+        //checks aws credentials
+        const s3 = new S3Client(
+        {
+            region: process.env.MY_AWS_REGION,
+            credentials:
+            {
+                accessKeyId: process.env.MY_AWS_ACCESS_KEY_ID,
+                secretAccessKey: process.env.MY_AWS_SECRET_ACCESS_KEY
+            }
+        });
+        //deletes the image from aws
+        try
+        {
+            const data = await s3.send(new DeleteObjectCommand(
+            {
+                Bucket: process.env.MY_AWS_BUCKET,
+                Key: filename
+            }));
+       
+            console.log("Object deleted ", data);
+        }
+        catch(err)
+        {
+            console.error(err);
+        }
+    }
+    else
+    {
+        //deletes image from uploads folder
+        let path = `public/uploads/${filename}`;
+        fs.access(path, fs.constants.F_OK, (err) =>
+        {
+            if (err)
+            {
+                console.error(err);
+                return;
+            }
+        
+            fs.unlink(path, err =>
+            {
+                if (err)
+                {
+                    console.error(err);
+                    return;
+                }
+      
+                console.log(`${filename} was deleted`);
+            })
+        })
+    }
+}
+
+//reads bug data
 const readData = (req, res) => 
 {
     Bug.find()
@@ -51,7 +111,7 @@ const readAll = (req, res) =>
     });
 };
 
-//gets one reply in the database
+//gets one bug in the database
 const readOne = (req, res) => 
 {
     let id = req.params.id;
@@ -67,7 +127,7 @@ const readOne = (req, res) =>
         {
             res.status(404).json(
             {
-                "reply": `Bug with id: ${id} not found`
+                "bug": `Bug with id: ${id} not found`
             });
         }        
     })
@@ -78,7 +138,7 @@ const readOne = (req, res) =>
         {
             res.status(400).json(
             {
-                "reply": `Bad request, ${id} is not a valid id`
+                "bug": `Bad request, ${id} is not a valid id`
             });
         }
         else 
@@ -88,10 +148,16 @@ const readOne = (req, res) =>
     });
 };
 
-//creates a reply
+//creates a bug
 const createData = (req, res) =>
 {
     let body = req.body;
+
+    //user info
+    if(req.file)
+    {
+        body.image_path = process.env.STORAGE_ENGINE === 'S3' ? req.file.key : req.file.filename;
+    }
 
     User.findOne({_id: req.body.user_id})
     .then(user => 
@@ -100,7 +166,7 @@ const createData = (req, res) =>
         {
             return res.status(422).json(
             {
-                reply: "Not a users id",
+                message: "Not a user",
             });
         }
     })
@@ -108,7 +174,7 @@ const createData = (req, res) =>
     {    
         return res.status(201).json
         ({
-            reply: "Bug created",
+            bug: "Bug created",
             data
         });
     })
@@ -123,11 +189,18 @@ const createData = (req, res) =>
     });
 };
 
-//updates a reply
+//updates a bug
 const updateData = (req, res) => 
 {
     let id = req.params.id;
     let body = req.body;
+
+    //bug info
+    if(req.file)
+    {
+        body.image_path = null
+        body.image_path = process.env.STORAGE_ENGINE === 'S3' ? req.file.key : req.file.filename;
+    }
 
     User.findOne({_id: req.body.user_id})
     .then(user => 
@@ -136,7 +209,7 @@ const updateData = (req, res) =>
         {
             return res.status(422).json(
             {
-                reply: "Not a users id",
+                message: "Not a user",
             });
         }
     })
@@ -159,7 +232,7 @@ const updateData = (req, res) =>
         {
             res.status(404).json(
             {
-                "reply": `Bug with id: ${id} not found`
+                "bug": `Bug with id: ${id} not found`
             });
         }        
     }))
@@ -170,14 +243,14 @@ const updateData = (req, res) =>
             console.error('Validation Error!!', err);
             res.status(422).json({
                 "msg": "Validation Error",
-                "error" : err.reply 
+                "error" : err.bug 
             });
         }
         else if(err.name === 'CastError') 
         {
             res.status(400).json(
             {
-                "reply": `Bad request, ${id} is not a valid id`
+                "bug": `Bad request, ${id} is not a valid id`
             });
         }
         else 
@@ -188,7 +261,7 @@ const updateData = (req, res) =>
     });
 };
 
-//delete a reply
+//delete a bug
 const deleteData = (req, res) => 
 {
     let id = req.params.id;
@@ -204,7 +277,7 @@ const deleteData = (req, res) =>
         {
             res.status(404).json(
             {
-                "reply": `Bug with id: ${id} not found`
+                "bug": `Bug with id: ${id} not found`
             });
         }
     })
@@ -212,7 +285,7 @@ const deleteData = (req, res) =>
     {
         res.status(200).json(
         {
-            "reply": `Bug with id: ${id} deleted successfully`
+            "bug": `Bug with id: ${id} deleted successfully`
         });
     })
     .catch((err) => 
@@ -222,7 +295,7 @@ const deleteData = (req, res) =>
         {
             res.status(400).json(
             {
-                "reply": `Bad request, ${id} is not a valid id`
+                "bug": `Bad request, ${id} is not a valid id`
             });
         }
         else 

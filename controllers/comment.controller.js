@@ -7,6 +7,66 @@ const Comment = require('../models/comment.model');
 const Puzzle = require('../models/puzzle.model');
 const User = require('../models/user.model');
 
+//deletes a saved image
+const deleteImage = async (filename) =>
+{
+    //checks if env links to S3
+    if (process.env.STORAGE_ENGINE === 'S3')
+    {
+        const { S3Client, DeleteObjectCommand } = require('@aws-sdk/client-s3');
+  
+        //checks aws credentials
+        const s3 = new S3Client(
+        {
+            region: process.env.MY_AWS_REGION,
+            credentials:
+            {
+                accessKeyId: process.env.MY_AWS_ACCESS_KEY_ID,
+                secretAccessKey: process.env.MY_AWS_SECRET_ACCESS_KEY
+            }
+        });
+        //deletes the image from aws
+        try
+        {
+            const data = await s3.send(new DeleteObjectCommand(
+            {
+                Bucket: process.env.MY_AWS_BUCKET,
+                Key: filename
+            }));
+   
+            console.log("Object deleted ", data);
+        }
+        catch(err)
+        {
+            console.error(err);
+        }
+    }
+    else
+    {
+        //deletes image from uploads folder
+        let path = `public/uploads/${filename}`;
+        fs.access(path, fs.constants.F_OK, (err) =>
+        {
+            if (err)
+            {
+                console.error(err);
+                return;
+            }
+    
+            fs.unlink(path, err =>
+            {
+                if (err)
+                {
+                    console.error(err);
+                    return;
+                }
+  
+                console.log(`${filename} was deleted`);
+            })
+        })
+    }
+ }
+
 //reads comment data
 const readData = (req, res) => 
 {
@@ -94,6 +154,12 @@ const createData = (req, res) =>
 {
     let body = req.body;
 
+    //user info
+    if(req.file)
+    {
+        body.image_path = process.env.STORAGE_ENGINE === 'S3' ? req.file.key : req.file.filename;
+    }
+
     Puzzle.findOne({_id: req.body.puzzle_id})
     .then(puzzle => 
     {
@@ -104,10 +170,17 @@ const createData = (req, res) =>
             {
                 if (!comment)
                 {
-                    return res.status(422).json(
+                    User.findOne({_id: req.body.puzzle_id})
+                    .then(user => 
                     {
-                        message: "Not a comment or puzzle",
-                    });
+                        if (!user)
+                        {
+                            return res.status(422).json(
+                            {
+                                message: "Not a comment, user or puzzle",
+                            });
+                        }
+                    })
                 }
             })
         }
@@ -148,6 +221,13 @@ const updateData = (req, res) =>
     let id = req.params.id;
     let body = req.body;
 
+    //comment info
+    if(req.file)
+    {
+        body.image_path = null
+        body.image_path = process.env.STORAGE_ENGINE === 'S3' ? req.file.key : req.file.filename;
+    }
+
     Puzzle.findOne({_id: req.body.puzzle_id})
     .then(puzzle => 
     {
@@ -158,10 +238,17 @@ const updateData = (req, res) =>
             {
                 if (!comment)
                 {
-                    return res.status(422).json(
+                    User.findOne({_id: req.body.puzzle_id})
+                    .then(user => 
                     {
-                        message: "Not a comment or puzzle",
-                    });
+                        if (!user)
+                        {
+                            return res.status(422).json(
+                            {
+                                message: "Not a user, user or puzzle",
+                            });
+                        }
+                    })
                 }
             })
         }

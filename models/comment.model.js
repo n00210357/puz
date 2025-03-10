@@ -21,6 +21,11 @@ const CommentSchema = new Schema(
         type:String,
         required: [true, 'Description is required']
     },
+    //stores the http path to a image file
+    image_path:
+    {
+        type: String
+    }
 },
 
 {

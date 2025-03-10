@@ -26,6 +26,11 @@ const BugSchema = new Schema(
         type:Boolean,
         required: [true, 'fixed is required']
     },
+    //stores the http path to a image file
+    image_path:
+    {
+        type: String
+    }
 },
 
 {
