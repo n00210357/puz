@@ -2,6 +2,9 @@
 const express = require('express');
 const router = express.Router();
 
+//links to the image upload script
+const imageUpload = require('../conifg/image_upload.js')
+
 //grabs controllers functions
 const 
 {
