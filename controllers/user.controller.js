@@ -315,6 +315,7 @@ const login = (req, res) =>
             return res.status(200).json(
             {
                 _id: user._id,
+                email: user.email,
                 token: jwt.sign(
                 {
                     email: user.email,
