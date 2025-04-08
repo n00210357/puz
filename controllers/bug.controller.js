@@ -89,7 +89,7 @@ const readData = (req, res) =>
     });
 };
 
-//gets all messages in the database
+//gets all bugs in the database
 const readAll = (req, res) =>
 {
     Bug.find().then(data =>
