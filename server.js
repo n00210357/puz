@@ -52,7 +52,6 @@ app.use('/api/users', require('./routes/users.js'));
 app.use('/api/puzzles', require('./routes/puzzles.js'));
 app.use('/api/comments', require('./routes/comments.js'));
 app.use('/api/bugs', require('./routes/bugs.js'));
-//app.use('/api/mineral_mines', require('./routes/mineral_mines.js'));
 
 //logs the port
 app.listen(port, () =>

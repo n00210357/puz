@@ -254,6 +254,7 @@ const deleteData = (req, res) =>
     }); 
 };
 
+//registors the user
 const registor = (req, res) => 
 {
     let newUser = new User(req.body);
@@ -285,6 +286,7 @@ const registor = (req, res) =>
     );
 };
 
+//logs the user in
 const login = (req, res) => 
     {
         User.findOne({email: req.body.email})
@@ -330,6 +332,7 @@ const login = (req, res) =>
         });
     };
 
+//checks if user is logged in
 const loginRequired = (req, res, next) => 
 {    
     console.log(req.user)

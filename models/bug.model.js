@@ -3,7 +3,7 @@ const { Schema, model } = require('mongoose');
 
 const BugSchema = new Schema(
 {
-    //links to the worker that is working these hours
+    //links to user posting the bug
     user_id:
     {
         type:String,
@@ -14,13 +14,13 @@ const BugSchema = new Schema(
     {
         type:String,
     },
-    //links to the worker that is working these hours
+    //what the bug is
     text:
     {
         type:String,
         required: [true, 'text is required']
     },
-    //the details
+    //declares if the bug has been fixed or not
     fixed:
     {
         type:Boolean,

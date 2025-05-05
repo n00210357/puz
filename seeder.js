@@ -6,10 +6,8 @@ require('dotenv').config();
 //models
 const User = require('./api/models/user.model');
 const Puzzle = require('./api/models/puzzle.model');
-//const Company = require('./api/models/company.model');
-//const Mine = require('./api/models/mine.model');
-//const Work_hour = require('./api/models/work_hour.model');
-//const Mineral_mine = require('./api/models/mineral_mine.model');
+const Comment = require('./api/models/comment.model');
+const Bug = require('./api/models/bug.model');
 
 const connectDB = async () =>
 {
@@ -30,10 +28,6 @@ var num = 3;
 
 const user = [];
 const puzzle = [];
-//const company = [];
-//const mine = [];
-//const work_hour = [];
-//const mineral_mine = [];
 
 const gernerate = (num) =>
 {
@@ -64,34 +58,6 @@ const gernerate = (num) =>
             puzzleType,
             puzzleCode
         });
-
-        /*
-        name = faker.person.firstName();
-        description = faker.lorem.sentences(1);
-        var ceo_email = email
-            
-        company.push(
-        {
-            name,
-            description,
-            ceo_email
-        });
-
-        var company_name = name
-        name = faker.person.firstName(),
-        latitude = faker.number.int(),
-        longitude = faker.number.int(),
-        manager_email = email
-
-        mine.push(
-        {
-            company_name,
-            name,
-            latitude,
-            longitude,
-            manager_email,
-        });
-        */
     }
     return user, puzzle;
 }
@@ -121,17 +87,13 @@ async function seedData()
 
     const seedDB = async () => 
     {
-        //await Mineral_mine.collection.drop()
-        //await Work_hour.collection.drop()
-        //await Mine.collection.drop()
-        //await Company.collection.drop()
+        await Bug.collection.drop()
+        await Comment.collection.drop()
         await Puzzle.collection.drop()
         await User.collection.drop()
 
         await User.insertMany(user)
         await Puzzle.insertMany(puzzle)
-        //await Company.insertMany(company)
-        //await Mine.insertMany(mine)
     }
 
     seedDB().then(() => 
